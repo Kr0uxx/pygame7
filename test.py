@@ -127,7 +127,7 @@ def terminate():
 def start_screen():
     intro_text = ["Mario AAA game 2023 Rockstar Copyright"]
 
-    fon = pygame.transform.scale(load_image('fon.jpg'), (width, height))
+    fon = pygame.transform.scale(load_image('background.jpg'), (width, height))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
