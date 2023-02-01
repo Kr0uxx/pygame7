@@ -4,11 +4,15 @@ import os
 
 FPS = 50
 
+level = int(input('Введите уровень от 1 до 3: '))
+while not (1 <= level <= 3):
+    print('ERROR, AGAIN')
+    level = int(input('Введите уровень от 1 до 3: '))
+
 pygame.init()
-size = width, height = 500, 500
+size = WIDTH, HEIGHT = 500, 500
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
-
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
@@ -26,7 +30,6 @@ def load_image(name, colorkey=None):
         image = image.convert_alpha()
     return image
 
-
 class Camera:
     def init(self):
         self.dx = 0
@@ -37,9 +40,8 @@ class Camera:
         obj.rect.y += self.dy
 
     def update(self, target):
-        self.dx = -(target.rect.x + target.rect.w // 2 - width // 2)
-        self.dy = -(target.rect.y + target.rect.h // 2 - height // 2)
-
+        self.dx = -(target.rect.x + target.rect.w // 2 - WIDTH // 2)
+        self.dy = -(target.rect.y + target.rect.h // 2 - HEIGHT // 2)
 
 tile_images = {
     'wall': load_image('box.png'),
@@ -49,7 +51,6 @@ player_image = load_image('mario.png')
 
 tile_width = tile_height = 50
 
-
 class Tile(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(tiles_group, all_sprites)
@@ -57,14 +58,12 @@ class Tile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
 
-
 class Boxes(pygame.sprite.Sprite):
     def __init__(self, tile_type, pos_x, pos_y):
         super().__init__(boxes_group, all_sprites)
         self.image = tile_images[tile_type]
         self.rect = self.image.get_rect().move(
             tile_width * pos_x, tile_height * pos_y)
-
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x, pos_y):
@@ -75,9 +74,8 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, coords):
         self.rect = self.rect.move(coords[0], coords[1])
-        if pygame.sprite.spritecollideany(self, boxes_group):
+        if pygame.sprite.spritecollideany(self, boxes_group) or self.rect[0] < 0 or self.rect[0] > 500 or self.rect[1] < 0 or self.rect[1] > 500:
             self.rect = self.rect.move(-coords[0], -coords[1])
-
 
 player = None
 
@@ -87,7 +85,6 @@ tiles_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 boxes_group = pygame.sprite.Group()
 boxes = []
-
 
 def generate_level(level):
     new_player, x, y = None, None, None
@@ -103,7 +100,6 @@ def generate_level(level):
                 new_player = Player(x, y)
     return new_player, x, y
 
-
 def load_level(filename):
     filename = "data/" + filename
     with open(filename, 'r') as mapFile:
@@ -113,21 +109,18 @@ def load_level(filename):
 
     return list(map(lambda x: x.ljust(max_width, '.'), level_map))
 
-
-player, level_x, level_y = generate_level(load_level('map.txt'))
+player, level_x, level_y = generate_level(load_level(f'map{level}.txt'))
 
 camera = Camera()
-
 
 def terminate():
     pygame.quit()
     sys.exit()
 
-
 def start_screen():
-    intro_text = ["Mario AAA game 2023 Rockstar Copyright"]
+    intro_text = ["ГЛАВНОЕ - ВЫЖИТЬ"]
 
-    fon = pygame.transform.scale(load_image('fon.jpg'), (width, height))
+    fon = pygame.transform.scale(load_image('background.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
     font = pygame.font.Font(None, 30)
     text_coord = 50
@@ -140,7 +133,7 @@ def start_screen():
         text_coord += intro_rect.height
         screen.blit(string_rendered, intro_rect)
     a = True
-    while a:
+    while a == True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 terminate()
@@ -148,7 +141,6 @@ def start_screen():
                 a = False
         pygame.display.flip()
     play_game()
-
 
 def play_game():
     all_sprites.draw(screen)
