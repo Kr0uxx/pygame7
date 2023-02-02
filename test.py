@@ -118,7 +118,7 @@ def terminate():
     sys.exit()
 
 def start_screen():
-    intro_text = ["ГЛАВНОЕ - ВЫЖИТЬ"]
+    intro_text = ["Mario AAA game 2023 Rockstar Copyright"]
 
     fon = pygame.transform.scale(load_image('background.jpg'), (WIDTH, HEIGHT))
     screen.blit(fon, (0, 0))
