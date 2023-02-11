@@ -151,8 +151,6 @@ def start_screen():
 
 
 def play_game():
-    all_sprites.draw(screen)
-    player_group.draw(screen)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -161,27 +159,17 @@ def play_game():
                 if event.key == pygame.K_DOWN:
                     player.update([0, 50])
 
-                    all_sprites.draw(screen)
-                    player_group.draw(screen)
-
                 if event.key == pygame.K_UP:
                     player.update([0, -50])
-
-                    all_sprites.draw(screen)
-                    player_group.draw(screen)
 
                 if event.key == pygame.K_LEFT:
                     player.update([-50, 0])
 
-                    all_sprites.draw(screen)
-                    player_group.draw(screen)
-
                 if event.key == pygame.K_RIGHT:
                     player.update([50, 0])
 
-                    all_sprites.draw(screen)
-                    player_group.draw(screen)
-
+        all_sprites.draw(screen)
+        player_group.draw(screen)
         pygame.display.flip()
         clock.tick(FPS)
 
